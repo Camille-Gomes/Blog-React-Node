@@ -1,37 +1,32 @@
 import React from "react";
 import "./Post.css";
+import { Link } from "react-router-dom";
 
-const post = () => {
+const post = ({ post }) => {
     return (
         <div className="post">
-            <img
-                className="postImg"
-                src="https://mediaguinee.org/wp-content/uploads/2020/09/tokyo.jpg"
-                alt=""
-            ></img>
+            {post.photo && (
+                <img className="postImg" src={post.photo} alt=""></img>
+            )}
+
             <div className="postInfo">
                 <div className="postCats">
-                    <span className="postCat">Music</span>
-                    <span className="postCat">Life</span>
+                    {post.categories.map((c) => (
+                        <span key={c.id} className="postCat">
+                            {c.name}
+                        </span>
+                    ))}
                 </div>
-                <span className="postTitle">lorem ipsum dolor sit amet</span>
+                <Link to={`/post/${post._id}`} className="link">
+                    <span className="postTitle">{post.title}</span>
+                </Link>
+
                 <hr />
-                <span className="postDate">1 hour</span>
+                <span className="postDate">
+                    {new Date(post.createdAt).toDateString()}
+                </span>
             </div>
-            <p className="postDescription">
-                lorem ipsum dolor sit amet, consectetur adip lorem lorem ipsum
-                dolor sit am lorem lorem ipsum dolor sit amet, consectetur adip
-                lorem lorem ipsum dolor sit am loremlorem ipsum dolor sit amet,
-                consectetur adip lorem lorem ipsum dolor sit am lorem lorem
-                ipsum dolor sit amet, consectetur adip lorem lorem ipsum dolor
-                sit am lorem lorem ipsum dolor sit amet, consectetur adip lorem
-                lorem ipsum dolor sit am loremlorem ipsum dolor sit amet,
-                consectetur adip lorem lorem ipsum dolor sit am lorem lorem
-                ipsum dolor sit amet, consectetur adip lorem lorem ipsum dolor
-                sit am lorem lorem ipsum dolor sit amet, consectetur adip lorem
-                lorem ipsum dolor sit am loremlorem ipsum dolor sit amet,
-                consectetur adip lorem lorem ipsum dolor sit am lorem
-            </p>
+            <p className="postDescription">{post.desc}</p>
         </div>
     );
 };

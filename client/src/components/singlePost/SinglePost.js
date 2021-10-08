@@ -1,17 +1,34 @@
 import React from "react";
 import "./SinglePost.css";
+import { useLocation } from "react-router";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const SinglePost = () => {
+    const location = useLocation();
+    const path = location.pathname.split("/")[2];
+    const [post, setPost] = useState({});
+
+    useEffect(() => {
+        const getPost = async () => {
+            const res = await axios.get("/posts/" + path);
+            setPost(res.data);
+        };
+        getPost();
+    }, [path]);
     return (
         <div className="singlePost">
             <div className="singlePostWrapper">
-                <img
-                    className="singlePostImg"
-                    src="https://mediaguinee.org/wp-content/uploads/2020/09/tokyo.jpg"
-                    alt=""
-                ></img>
+                {post.photo && (
+                    <img
+                        className="singlePostImg"
+                        src={post.photo}
+                        alt=""
+                    ></img>
+                )}
                 <h1 className="singlePostTitle">
-                    Lorem ipsum dolor sit amet, consectetur
+                    {post.title}
                     <div className="singlePostEdit">
                         <i className="singlePostIcon far fa-edit"></i>
                         <i className="singlePostIcon far fa-trash-alt"></i>
@@ -19,25 +36,16 @@ const SinglePost = () => {
                 </h1>
                 <div className="singlePostInfo">
                     <span className="singlePostAuthor">
-                        Autor : <b>Safak</b>
+                        Autor :
+                        <Link to={`/?user=${post.username}`} className="link">
+                            <b> {post.username}</b>
+                        </Link>
                     </span>
-                    <span className="singlePostDate">1 hour ago</span>
+                    <span className="singlePostDate">
+                        {new Date(post.createdAt).toDateString()}
+                    </span>
                 </div>
-                <p className="singlePostDescription">
-                    Lorem ipsum dolor sit amet, consectetur adip lorem lorem
-                    ipsum dolor sit am lorem lorem ipsum dolor sit amet,
-                    consectetur adip lorem lorem ipsum dolor sit am loremlorem
-                    ipsum dolor sit amet, consectetur adip lorem lorem ipsum
-                    dolor sit am lorem lorem ipsum dolor sit amet, consectetur
-                    adip lorem lorem ipsum dolor sit am lorem lorem ipsum dolor
-                    sit amet, consectetur adip lorem lorem ipsum dolor sit am
-                    loremlorem ipsum dolor sit amet, consectetur adip lorem
-                    lorem ipsum dolor sit am lorem lorem ipsum dolor sit amet,
-                    consectetur adip lorem lorem ipsum dolor sit am lorem lorem
-                    ipsum dolor sit amet, consectetur adip lorem lorem ipsum
-                    dolor sit am loremlorem ipsum dolor sit amet, consectetur
-                    adip lorem lorem ipsum dolor sit am lorem
-                </p>
+                <p className="singlePostDescription">{post.desc}</p>
             </div>
         </div>
     );
