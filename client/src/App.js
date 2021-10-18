@@ -6,9 +6,11 @@ import Settings from "./pages/settings/Settings";
 import Single from "./pages/single/Single";
 import Write from "./pages/write/Write";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { useContext } from "react";
+import { Context } from "./context/Context";
 
 function App() {
-    const currentUser = false;
+    const { user } = useContext(Context);
     return (
         <BrowserRouter>
             <TopBar></TopBar>
@@ -20,19 +22,19 @@ function App() {
                     <Home></Home>
                 </Route>
                 <Route exact path="/register" component={Register}>
-                    {currentUser ? <Home /> : <Register />}
+                    {user ? <Home /> : <Register />}
                 </Route>
                 <Route exact path="/login" component={Login}>
-                    {currentUser ? <Home></Home> : <Login></Login>}
+                    {user ? <Home></Home> : <Login></Login>}
                 </Route>
                 <Route exact path="/post/:id" component={Home}>
                     <Single></Single>
                 </Route>
                 <Route exact path="/write" component={Write}>
-                    {currentUser ? <Write></Write> : <Login></Login>}
+                    {user ? <Write></Write> : <Login></Login>}
                 </Route>
                 <Route exact path="/settings" component={Settings}>
-                    {currentUser ? <Settings></Settings> : <Login></Login>}
+                    {user ? <Settings></Settings> : <Login></Login>}
                 </Route>
             </Switch>
         </BrowserRouter>
